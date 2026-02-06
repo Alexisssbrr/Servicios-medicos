@@ -1,9 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using ServicioMedico.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// 2. Configurar la conexión a SQL Server
+var connectionString = builder.Configuration.GetConnectionString("CadenaConexion");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

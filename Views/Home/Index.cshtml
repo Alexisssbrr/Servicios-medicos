@@ -1,7 +1,9 @@
-﻿
+﻿@model IEnumerable<ServicioMedico.Models.VisitaMedica>
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Directorio de Alumnos";
 }
+
 <div class="container mt-5">
     <div class="container mt-4">
         <div class="row justify-content-center">
@@ -18,46 +20,53 @@
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4" id="contenedorTarjetas">
+        
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No hay alumnos registrados aún.</p>
+                <a asp-action="Register" class="btn btn-primary">Registrar Nuevo</a>
+            </div>
+        }
 
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0 pt-3">
-                <div class="text-center">
-                    <img src="https://i.pravatar.cc/150?u=1" class="rounded-circle border" style="width: 100px; height: 100px;" alt="Alumno">
-                </div>
-                <div class="card-body text-center">
-                    <h6 class="card-title mb-1">Juan Pérez</h6>
-                    <p class="text-muted x-small mb-2">Mat: 20230001</p>
-                    <span class="badge bg-info text-dark" style="font-size: 0.7rem;">Ing. Sistemas</span>
-                    <hr>
+        @foreach (var alumno in Model)
+        {
+            <div class="col tarjeta-alumno">
+                <div class="card h-100 shadow-sm border-0 pt-3">
+                    <div class="text-center">
+                        <img src="@($"https://i.pravatar.cc/150?u={alumno.Matricula}")" class="rounded-circle border" style="width: 100px; height: 100px;" alt="Alumno">
+                    </div>
+                    <div class="card-body text-center">
+                        <h6 class="card-title mb-1">@alumno.NombreCompleto</h6>
+                        <p class="text-muted x-small mb-2">Mat: <span class="dato-matricula">@alumno.Matricula</span></p>
+                        
+                        <span class="badge bg-info text-dark" style="font-size: 0.7rem;">@alumno.Carrera</span>
+                        <hr>
 
-                    <a class="btn btn-sm btn-outline-primary w-100"
-                       asp-area=""
-                       asp-controller="Home"
-                       asp-action="History"
-                       asp-route-id="20230001">
-                        Ver Historial
-                    </a>
+                        <a class="btn btn-sm btn-outline-primary w-100"
+                           asp-controller="Home"
+                           asp-action="History"
+                           asp-route-id="@alumno.Matricula">
+                            Ver Historial
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
 
     </div>
 </div>
 
 <script>
     function filtrarAlumnos() {
-        // Obtenemos el texto del buscador
         let filtro = document.getElementById('buscadorAlumno').value.toLowerCase();
-        // Obtenemos todas las tarjetas de alumnos
-        let tarjetas = document.querySelectorAll('.col');
+        let tarjetas = document.querySelectorAll('.tarjeta-alumno');
 
         tarjetas.forEach(tarjeta => {
-            // Buscamos el nombre y la matrícula dentro de la tarjeta
             let nombre = tarjeta.querySelector('.card-title').innerText.toLowerCase();
-            let matricula = tarjeta.querySelector('.text-muted').innerText.toLowerCase();
+            let matricula = tarjeta.querySelector('.dato-matricula').innerText.toLowerCase();
 
-            // Si coincide con el filtro, la mostramos; si no, la ocultamos
             if (nombre.includes(filtro) || matricula.includes(filtro)) {
                 tarjeta.style.display = "";
             } else {

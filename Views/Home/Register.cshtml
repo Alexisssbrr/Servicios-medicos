@@ -1,38 +1,41 @@
-﻿@{
+﻿@model ServicioMedico.Models.VisitaMedica
+@{
     ViewData["Title"] = "Registro de Visita";
 }
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="card shadow-sm" style="width: 100%; max-width: 500px; border-radius: 10px;">
+    <div class="card shadow-sm" style="width: 100%; max-width: 600px; border-radius: 10px;">
         <div class="card-body p-4">
             <h2 class="text-center mb-4" style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
                 Registro de Visita Médica
             </h2>
 
-            <form>
+            <form asp-action="Register" method="post">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Matrícula</label>
-                        <input type="text" class="form-control" placeholder="Ej. 2216109093" required>
+                        <input asp-for="Matricula" class="form-control" placeholder="Ej. 2216109093" />
+                        <span asp-validation-for="Matricula" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Nombre Completo</label>
-                        <input type="text" class="form-control" placeholder="Nombre del alumno" required>
+                        <input asp-for="NombreCompleto" class="form-control" placeholder="Nombre del alumno" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 mb-3">
                         <label class="form-label fw-bold">Carrera</label>
-                        <select class="form-select" required>
+                        <select asp-for="Carrera" class="form-select">
                             <option value="">Selecciona una carrera</option>
-                            <option value="1">Ingeniería en Gestión y Desarrollo de Software Multiplataforma</option>
-                            <option value="2">Ingeniería en Operaciones y Procesos Industriales</option>
+                            <option value="Ing. Software">Ing. Software</option>
+                            <option value="Ing. Industrial">Ing. Industrial</option>
+                            <option value="Ing. Mecatrónica">Ing. Mecatrónica</option>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold">Fecha de Visita</label>
-                        <input type="date" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        <input asp-for="FechaVisita" type="date" class="form-control" />
                     </div>
                 </div>
 
@@ -41,20 +44,20 @@
                 <h5 class="mb-3 text-primary"><i class="bi bi-person-lines-fill"></i> Información del Alumno</h5>
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <label class="form-label fw-bold small">Fecha Nacimiento</label>
-                        <input type="date" class="form-control" id="fechaNacimiento" onchange="calcularEdad()">
+                        <label class="form-label fw-bold small">Fecha Nac.</label>
+                        <input asp-for="FechaNacimiento" type="date" class="form-control" id="fechaNacimiento" onchange="calcularEdad()">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label fw-bold small">Edad</label>
-                        <input type="number" class="form-control" id="edad" placeholder="Años" readonly>
+                        <input asp-for="Edad" class="form-control" id="edad" readonly>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label fw-bold small">Talla (cm)</label>
-                        <input type="number" step="0.1" class="form-control" placeholder="Ej. 170">
+                        <input asp-for="Talla" type="number" step="0.1" class="form-control">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label fw-bold small">Peso (kg)</label>
-                        <input type="number" step="0.1" class="form-control" placeholder="Ej. 70.5">
+                        <input asp-for="Peso" type="number" step="0.1" class="form-control">
                     </div>
                 </div>
 
@@ -62,62 +65,54 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold d-block">¿Tiene Alergias?</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radioAlergias" id="alergiaNo" value="no" checked onchange="toggleAlergias()">
-                            <label class="form-check-label" for="alergiaNo">No</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radioAlergias" id="alergiaSi" value="si" onchange="toggleAlergias()">
-                            <label class="form-check-label" for="alergiaSi">Sí</label>
+                            <input asp-for="TieneAlergias" class="form-check-input" type="checkbox" id="checkAlergias" onchange="toggleAlergias()">
+                            <label class="form-check-label" for="checkAlergias">Marcar si tiene</label>
                         </div>
 
                         <div id="campoEspecificarAlergia" class="mt-2 d-none">
-                            <input type="text" class="form-control form-control-sm border-danger" id="inputAlergia" placeholder="Especifique la alergia...">
+                            <input asp-for="EspecificarAlergia" class="form-control form-control-sm border-danger" id="inputAlergia" placeholder="Especifique la alergia...">
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Enfermedades Crónicas</label>
-                        <input type="text" class="form-control" placeholder="Diabetes, asma, etc.">
+                        <input asp-for="EnfermedadesCronicas" class="form-control" placeholder="Diabetes, asma, etc.">
                     </div>
                 </div>
 
                 <hr class="my-4 text-muted">
-
                 <h5 class="mb-3 text-danger"><i class="bi bi-heart-pulse"></i> Signos Vitales</h5>
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold small">Frecuencia Cardíaca (LPM)</label>
-                        <input type="text" class="form-control" placeholder="Ej. 72">
+                        <label class="small fw-bold">Frec. Cardíaca</label>
+                        <input asp-for="FrecuenciaCardiaca" class="form-control" placeholder="Ej. 72">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold small">Frecuencia Respiratoria (RPM)</label>
-                        <input type="text" class="form-control" placeholder="Ej. 16">
+                        <label class="small fw-bold">Frec. Respiratoria</label>
+                        <input asp-for="FrecuenciaRespiratoria" class="form-control" placeholder="Ej. 16">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold small">Saturación (%)</label>
-                        <input type="text" class="form-control" placeholder="Ej. 98">
+                        <label class="small fw-bold">Saturación (%)</label>
+                        <input asp-for="Saturacion" class="form-control" placeholder="Ej. 98">
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Temperatura (°C)</label>
-                        <input type="number" step="0.1" class="form-control" placeholder="Ej. 36.5">
+                        <label class="small fw-bold">Temperatura (°C)</label>
+                        <input asp-for="Temperatura" type="number" step="0.1" class="form-control" placeholder="Ej. 36.5">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Presión Arterial</label>
-                        <input type="text" class="form-control" placeholder="Ej. 120/80">
+                        <label class="small fw-bold">Presión Arterial</label>
+                        <input asp-for="PresionArterial" class="form-control" placeholder="Ej. 120/80">
                     </div>
                 </div>
 
                 <div class="mb-3 mt-3">
                     <label class="form-label fw-bold">Diagnóstico</label>
-                    <textarea class="form-control" rows="4" placeholder="Describa el motivo o síntomas..." required></textarea>
+                    <textarea asp-for="Diagnostico" class="form-control" rows="4" placeholder="Describa el motivo..." required></textarea>
                 </div>
 
                 <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg shadow-sm" style="background-color: #3498db; border: none;">
-                        Registrar Entrada
-                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">Registrar Entrada</button>
                 </div>
             </form>
         </div>
@@ -125,13 +120,12 @@
 </div>
 
 <script>
-    // Función para mostrar/ocultar campo de alergias
     function toggleAlergias() {
-        const radioSi = document.getElementById('alergiaSi');
+        const check = document.getElementById('checkAlergias');
         const contenedor = document.getElementById('campoEspecificarAlergia');
         const input = document.getElementById('inputAlergia');
 
-        if (radioSi.checked) {
+        if (check.checked) {
             contenedor.classList.remove('d-none');
             input.focus();
         } else {
@@ -140,7 +134,6 @@
         }
     }
 
-    // Función extra: Calcular edad automáticamente
     function calcularEdad() {
         const fechaNac = document.getElementById('fechaNacimiento').value;
         if (fechaNac) {
