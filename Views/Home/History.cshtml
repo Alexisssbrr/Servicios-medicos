@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "History";
+}
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary me-3">← Volver</a>
+        <h2 class="mb-0">Historial de Visitas: <span class="text-primary">@ViewData["Matricula"]</span></h2>
+    </div>
+
+    <div class="vstack gap-3">
+
+        <div class="card shadow-sm border-start border-primary border-4">
+            <div class="card-body">
+                <div class="row align-items-center text-center text-md-start">
+                    <div class="col-md-2">
+                        <h5 class="mb-0 text-primary">05 Feb</h5>
+                        <small class="text-muted">2026</small>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="d-block text-muted">Carrera</small>
+                        <strong>Ingeniería en Sistemas</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="d-block text-muted">Departamento</small>
+                        <span class="badge bg-info text-dark">Servicio Médico</span>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDescripcion1">
+                            Ver Diagnóstico
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-start border-success border-4">
+            <div class="card-body">
+                <div class="row align-items-center text-center text-md-start">
+                    <div class="col-md-2">
+                        <h5 class="mb-0 text-success">20 Ene</h5>
+                        <small class="text-muted">2026</small>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="d-block text-muted">Carrera</small>
+                        <strong>Ingeniería en Sistemas</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="d-block text-muted">Departamento</small>
+                        <span class="badge bg-warning text-dark">Psicología</span>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDescripcion2">
+                            Ver Diagnóstico
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalDescripcion1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Descripción del Especialista</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-2 small">Atendido por: Dr. Armando Casas</p>
+                <div class="p-3 bg-light border rounded">
+                    "El alumno presenta síntomas de estrés académico y falta de sueño. Se le brindaron técnicas de relajación y se agendó seguimiento."
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

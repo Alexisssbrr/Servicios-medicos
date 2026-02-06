@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Registro de Visita";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm" style="width: 100%; max-width: 500px; border-radius: 10px;">
+        <div class="card-body p-4">
+            <h2 class="text-center mb-4" style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+                Registro de Visita Médica
+            </h2>
+
+            <form>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Matrícula</label>
+                    <input type="text" class="form-control" placeholder="Ej. 20230001" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre Completo</label>
+                    <input type="text" class="form-control" placeholder="Nombre del alumno" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Carrera</label>
+                    <select class="form-select" required>
+                        <option value="">Selecciona una carrera</option>
+                        <option value="1">Ingeniería</option>
+                        <option value="2">Licenciatura</option>
+                        <option value="3">Medicina</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Fecha de Visita</label>
+                    <input type="date" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Razón de la Visita</label>
+                    <textarea class="form-control" rows="4" placeholder="Describa el motivo o síntomas..." required></textarea>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary" style="background-color: #3498db; border: none;">
+                        Registrar Entrada
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

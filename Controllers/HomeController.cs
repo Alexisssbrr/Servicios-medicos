@@ -17,6 +17,15 @@ namespace ServicioMedico.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult History()
+        {
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {
