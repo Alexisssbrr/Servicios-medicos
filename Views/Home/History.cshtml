@@ -51,21 +51,63 @@
                             <h5 class="modal-title">Detalle de la Visita</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body">
-                            <p class="text-muted mb-2 small">Atendido el: @visita.FechaVisita</p>
-                            
-                            <h6 class="fw-bold">Signos Vitales:</h6>
-                            <ul>
-                                <li>Temp: @visita.Temperatura °C</li>
-                                <li>Presión: @visita.PresionArterial</li>
-                                <li>Sat: @visita.Saturacion %</li>
-                            </ul>
+                      <div class="modal-body">
+    <p class="text-muted mb-3 small border-bottom pb-2">
+        <i class="bi bi-calendar-event"></i> Atendido el: @visita.FechaVisita.ToString("f")
+    </p>
 
-                            <h6 class="fw-bold mt-3">Diagnóstico:</h6>
-                            <div class="p-3 bg-light border rounded">
-                                "@visita.Diagnostico"
-                            </div>
-                        </div>
+    <h6 class="fw-bold text-secondary"><i class="bi bi-person-badge"></i> Información Física</h6>
+    <div class="row mb-3">
+        <div class="col-6">
+            <small class="d-block text-muted">Talla</small>
+            <span>@(visita.Talla > 0 ? visita.Talla + " cm" : "N/A")</span>
+        </div>
+        <div class="col-6">
+            <small class="d-block text-muted">Peso</small>
+            <span>@(visita.Peso > 0 ? visita.Peso + " kg" : "N/A")</span>
+        </div>
+    </div>
+
+    <h6 class="fw-bold text-danger"><i class="bi bi-heart-pulse"></i> Signos Vitales</h6>
+    <div class="row g-2 mb-3">
+        <div class="col-4 border-end">
+            <small class="d-block text-muted text-truncate">Temp.</small>
+            <span class="fw-bold">@visita.Temperatura °C</span>
+        </div>
+        <div class="col-4 border-end text-center">
+            <small class="d-block text-muted">Presión</small>
+            <span class="fw-bold">@visita.PresionArterial</span>
+        </div>
+        <div class="col-4 text-end">
+            <small class="d-block text-muted">Saturación</small>
+            <span class="fw-bold">@visita.Saturacion %</span>
+        </div>
+        <div class="col-6 mt-2">
+            <small class="d-block text-muted">Frec. Cardíaca</small>
+            <span>@visita.FrecuenciaCardiaca lpm</span>
+        </div>
+        <div class="col-6 mt-2">
+            <small class="d-block text-muted">Frec. Respiratoria</small>
+            <span>@visita.FrecuenciaRespiratoria rpm</span>
+        </div>
+    </div>
+
+    <h6 class="fw-bold text-warning"><i class="bi bi-exclamation-triangle"></i> Antecedentes</h6>
+    <div class="mb-3">
+        <small class="d-block text-muted">Alergias:</small>
+        <span class="@(visita.TieneAlergias ? "text-danger fw-bold" : "text-success")">
+            @(visita.TieneAlergias ? "Sí presenta" : "Ninguna")
+        </span>
+        
+        <small class="d-block text-muted mt-2">Enfermedades Crónicas:</small>
+        <span class="text-dark">@(string.IsNullOrEmpty(visita.EnfermedadesCronicas) ? "Ninguna reportada" : visita.EnfermedadesCronicas)</span>
+    </div>
+
+    <h6 class="fw-bold text-primary"><i class="bi bi-clipboard2-pulse"></i> Diagnóstico:</h6>
+    <div class="p-3 bg-light border-start border-primary border-4 rounded">
+        "@visita.Diagnostico"
+    </div>
+</div>
                     </div>
                 </div>
             </div>

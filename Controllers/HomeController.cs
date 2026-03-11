@@ -17,7 +17,6 @@ namespace ServicioMedico.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Verifica que la tabla Visitas exista gracias al paso 1
             var alumnos = await _context.Visitas
                 .GroupBy(v => v.Matricula)
                 .Select(g => g.OrderByDescending(v => v.FechaVisita).First())
@@ -35,6 +34,12 @@ namespace ServicioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(VisitaMedica visita)
         {
+            // ASIGNACIÓN AUTOMÁTICA DE FECHA Y HORA
+            visita.FechaVisita = DateTime.Now;
+
+            // Removemos la validación de FechaVisita porque la estamos asignando manualmente aquí
+            ModelState.Remove("FechaVisita");
+
             if (ModelState.IsValid)
             {
                 _context.Add(visita);
@@ -70,5 +75,5 @@ namespace ServicioMedico.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    } // Cierre de la clase
-} // Cierre del namespace
+    }
+}
