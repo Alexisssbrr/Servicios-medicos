@@ -4,10 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema; // <-- ESTO ES VITAL PARA US
 namespace ServicioMedico.Models
 {
     // 1. Aquí le decimos que esta clase apunta a la tabla "Inscripciones"
-    [Table("Inscripciones")]
+    [Table("Preinscripciones")]
     public class PreinscripcionEntity
     {
         public int Id { get; set; }
+
+        public string? Matricula { get; set; } // 🔥 AGREGAR
+        public int PreinscripcionId { get; set; } // 🔥 AGREGAR
         public string? Folio { get; set; }
         public string CarreraSolicitada { get; set; } = string.Empty;
         public decimal Promedio { get; set; }

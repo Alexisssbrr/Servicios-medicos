@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using ServicioMedico.Data; // Asegúrate de que esto coincida con tu namespace
 using ServicioMedico.Models;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using ServicioMedico.Models;
+
 
 namespace ServicioMedico.Controllers
 {
@@ -23,8 +26,10 @@ namespace ServicioMedico.Controllers
             return View();
             // Esto buscará el archivo Views/VisitaMedica/Create.cshtml
         }
-
-        // 2. Esta es la API que tu JavaScript va a llamar para traer los datos
+        [HttpGet]
+        [HttpGet]
+        [HttpGet]
+        [HttpGet]
         [HttpGet]
         public async Task<IActionResult> ObtenerDatosAlumno(string matricula)
         {
@@ -33,26 +38,61 @@ namespace ServicioMedico.Controllers
                 return BadRequest("Matrícula vacía");
             }
 
-            // Buscamos en tu base de datos (DbSet Preinscripcion)
-            var alumno = await _context.Preinscripcion
-                .Include(p => p.DatosPersonales)
-                .FirstOrDefaultAsync(p => p.Folio == matricula);
+            AlumnoDTO alumno = null;
 
-            if (alumno == null || alumno.DatosPersonales == null)
+            using (var connection = _context.Database.GetDbConnection())
             {
-                return NotFound(); // Retorna 404 si no existe
+                await connection.OpenAsync();
+
+                var query = @"
+            SELECT 
+                (dp.Nombre + ' ' + dp.ApellidoPaterno + ' ' + dp.ApellidoMaterno) AS NombreCompleto,
+                i.CarreraSolicitada AS Carrera,
+                CONVERT(varchar, dp.FechaNacimiento, 23) AS FechaNacimiento
+            FROM Inscripciones i
+            INNER JOIN Preinscripciones p ON i.PreinscripcionId = p.Id
+            INNER JOIN PreinscripcionDatosPersonales dp ON dp.PreinscripcionId = p.Id
+            WHERE i.Matricula = @matricula
+        ";
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+
+                    var param = command.CreateParameter();
+                    param.ParameterName = "@matricula";
+                    param.Value = matricula;
+                    command.Parameters.Add(param);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            alumno = new AlumnoDTO
+                            {
+                                NombreCompleto = reader["NombreCompleto"].ToString(),
+                                Carrera = reader["Carrera"].ToString(),
+                                FechaNacimiento = reader["FechaNacimiento"].ToString()
+                            };
+                        }
+                    }
+                }
             }
 
-            // Armamos el JSON que espera tu JavaScript
-            var resultado = new
+            if (alumno == null)
             {
-                nombreCompleto = $"{alumno.DatosPersonales.Nombre} {alumno.DatosPersonales.ApellidoPaterno} {alumno.DatosPersonales.ApellidoMaterno}".Trim(),
-                carrera = alumno.CarreraSolicitada,
-                // Formato ISO para el input type="date"
-                fechaNacimiento = alumno.DatosPersonales.FechaNacimiento.ToString("yyyy-MM-dd")
-            };
+                return NotFound("No se encontró el alumno");
+            }
 
-            return Json(resultado);
+            return Json(new
+            {
+                nombreCompleto = alumno.NombreCompleto,
+                carrera = alumno.Carrera,
+                fechaNacimiento = alumno.FechaNacimiento
+            });
         }
     }
 }
+
+
+
