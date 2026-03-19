@@ -26,12 +26,7 @@
                 <div class="row">
                     <div class="col-md-8 mb-3">
                         <label class="form-label fw-bold">Carrera</label>
-                        <select asp-for="Carrera" class="form-select">
-                            <option value="">Selecciona una carrera</option>
-                            <option value="Ing. Software">Ing. Software</option>
-                            <option value="Ing. Industrial">Ing. Industrial</option>
-                            <option value="Ing. Mecatrónica">Ing. Mecatrónica</option>
-                        </select>
+                        <input asp-for="Carrera" class="form-control" placeholder="SEXnologias de la informacion" />
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold">Fecha de Visita</label>
@@ -147,4 +142,39 @@
             document.getElementById('edad').value = edad;
         }
     }
+
+        document.addEventListener("DOMContentLoaded", function() {
+        const inputMatricula = document.getElementById('Matricula');
+
+        inputMatricula.addEventListener('blur', function() {
+            const matricula = this.value.trim();
+            console.log("Paso 1: Salió del campo. Matrícula a buscar:", matricula);
+
+            if (matricula) {
+                console.log("Paso 2: Haciendo la petición al servidor...");
+
+                // OJO AQUÍ: Asegúrate de que tu controlador se llama exactamente VisitaMedicaController
+                fetch(`/VisitaMedica/ObtenerDatosAlumno?matricula=${matricula}`)
+                    .then(response => {
+                        console.log("Paso 3: Respuesta del servidor recibida. Status:", response.status);
+                        if (!response.ok) {
+                            throw new Error('El servidor respondió con error: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Paso 4: Datos recibidos listos para llenar:", data);
+
+                        document.getElementById('NombreCompleto').value = data.nombreCompleto;
+                        document.getElementById('Carrera').value = data.carrera;
+                        document.getElementById('fechaNacimiento').value = data.fechaNacimiento;
+
+                        calcularEdad();
+                    })
+                    .catch(error => {
+                        console.error("Paso 5: ERROR detectado ->", error);
+                    });
+            }
+        });
+    });
 </script>

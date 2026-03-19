@@ -11,5 +11,6 @@ namespace ServicioMedico.Data
         }
 
         public DbSet<VisitaMedica> Visitas { get; set; }
+        public DbSet<PreinscripcionEntity> Preinscripcion { get; set; }
     }
 }

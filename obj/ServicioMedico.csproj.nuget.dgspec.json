@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\UNIVERSIDAD\\10MO\\PI\\Servicios-medicos\\ServicioMedico.csproj": {}
+    "C:\\Users\\Alexi\\OneDrive\\Documentos\\Universidad\\10mo\\Proyecto Integrador\\ServicioMedico\\ServicioMedico.csproj": {}
   },
   "projects": {
-    "C:\\UNIVERSIDAD\\10MO\\PI\\Servicios-medicos\\ServicioMedico.csproj": {
+    "C:\\Users\\Alexi\\OneDrive\\Documentos\\Universidad\\10mo\\Proyecto Integrador\\ServicioMedico\\ServicioMedico.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\UNIVERSIDAD\\10MO\\PI\\Servicios-medicos\\ServicioMedico.csproj",
+        "projectUniqueName": "C:\\Users\\Alexi\\OneDrive\\Documentos\\Universidad\\10mo\\Proyecto Integrador\\ServicioMedico\\ServicioMedico.csproj",
         "projectName": "ServicioMedico",
-        "projectPath": "C:\\UNIVERSIDAD\\10MO\\PI\\Servicios-medicos\\ServicioMedico.csproj",
-        "packagesPath": "C:\\Users\\gesau\\.nuget\\packages\\",
-        "outputPath": "C:\\UNIVERSIDAD\\10MO\\PI\\Servicios-medicos\\obj\\",
+        "projectPath": "C:\\Users\\Alexi\\OneDrive\\Documentos\\Universidad\\10mo\\Proyecto Integrador\\ServicioMedico\\ServicioMedico.csproj",
+        "packagesPath": "C:\\Users\\Alexi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Alexi\\OneDrive\\Documentos\\Universidad\\10mo\\Proyecto Integrador\\ServicioMedico\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\gesau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Alexi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

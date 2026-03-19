@@ -30,10 +30,6 @@ namespace ServicioMedico.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Carrera")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Diagnostico")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,9 +43,6 @@ namespace ServicioMedico.Migrations
                     b.Property<string>("EspecificarAlergia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FechaNacimiento")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("FechaVisita")
                         .HasColumnType("datetime2");
 
@@ -60,10 +53,6 @@ namespace ServicioMedico.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Matricula")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -25,9 +25,9 @@
                             <img src="@($"https://i.pravatar.cc/150?u={alumno.Matricula}")" class="rounded-circle border" style="width: 80px; height: 80px;">
                         </div>
                         <div class="flex-grow-1 text-center text-md-start">
-                            <h5 class="card-title mb-1 fw-bold">@alumno.NombreCompleto</h5>
+                            <h5 class="card-title mb-1 fw-bold"></h5>
                             <p class="text-muted mb-1">Matrícula: <span class="dato-matricula fw-semibold">@alumno.Matricula</span></p>
-                            <span class="badge bg-info text-dark">@alumno.Carrera</span>
+                            <span class="badge bg-info text-dark"></span>
                         </div>
                         <div class="flex-shrink-0">
                             <a class="btn btn-outline-primary rounded-pill px-4" asp-action="History" asp-route-id="@alumno.Matricula"> Ver Historial </a>
