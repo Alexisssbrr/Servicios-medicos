@@ -17,13 +17,50 @@ namespace ServicioMedico.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var alumnos = await _context.Visitas
-                .GroupBy(v => v.Matricula)
-                .Select(g => g.OrderByDescending(v => v.FechaVisita).First())
-                .ToListAsync();
+            var alumnos = new List<VisitaMedica>();
+
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                await connection.OpenAsync();
+
+                // Esta consulta busca la última visita de cada matrícula y jala el nombre y carrera de las otras tablas
+                var query = @"
+            SELECT v.*, 
+                   (dp.Nombre + ' ' + dp.ApellidoPaterno + ' ' + dp.ApellidoMaterno) AS NombreCompleto,
+                   i.CarreraSolicitada AS Carrera
+            FROM Visitas v
+            INNER JOIN (
+                SELECT Matricula, MAX(FechaVisita) as MaxFecha
+                FROM Visitas
+                GROUP BY Matricula
+            ) latest ON v.Matricula = latest.Matricula AND v.FechaVisita = latest.MaxFecha
+            LEFT JOIN Inscripciones i ON v.Matricula = i.Matricula
+            LEFT JOIN PreinscripcionDatosPersonales dp ON i.PreinscripcionId = dp.PreinscripcionId";
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            alumnos.Add(new VisitaMedica
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Matricula = reader["Matricula"].ToString(),
+                                NombreCompleto = reader["NombreCompleto"]?.ToString() ?? "No encontrado",
+                                Carrera = reader["Carrera"]?.ToString() ?? "No encontrada",
+                                FechaVisita = Convert.ToDateTime(reader["FechaVisita"])
+                                // Agrega aquí los demás campos que necesites mostrar (Edad, Diagnostico, etc.)
+                            });
+                        }
+                    }
+                }
+            }
 
             return View(alumnos);
         }
+        
 
         public IActionResult Register()
         {
