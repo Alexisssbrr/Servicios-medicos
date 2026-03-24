@@ -1,0 +1,125 @@
+﻿@model IEnumerable<ServicioMedico.Models.VisitaPsicologica>
+
+@{
+    ViewData["Title"] = "Historial Psicológico";
+}
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary me-3">← Volver</a>
+        <h2 class="mb-0">Historial de: <span class="text-primary">@ViewData["Matricula"]</span></h2>
+    </div>
+
+    <div class="vstack gap-3">
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info">Este alumno no tiene consultas psicológicas registradas.</div>
+        }
+
+        @foreach (var visita in Model)
+        {
+            <div class="card shadow-sm border-start border-purple border-4" style="border-color:#8e44ad !important;">
+                <div class="card-body">
+                    <div class="row align-items-center text-center text-md-start">
+                        
+                        <!-- Fecha -->
+                        <div class="col-md-2">
+                            <h5 class="mb-0" style="color:#8e44ad;">@visita.FechaVisita.ToString("dd MMM")</h5>
+                            <small class="text-muted">@visita.FechaVisita.ToString("yyyy")</small>
+                            <small class="d-block text-muted">@visita.FechaVisita.ToString("HH:mm") hrs</small>
+                        </div>
+
+                        <!-- Edad -->
+                        <div class="col-md-2">
+                            <small class="d-block text-muted">Edad</small>
+                            <strong>@visita.Edad años</strong>
+                        </div>
+
+                        <!-- Departamento -->
+                        <div class="col-md-3">
+                            <small class="d-block text-muted">Departamento</small>
+                            <span class="badge text-white" style="background-color:#8e44ad;">Psicología</span>
+                        </div>
+
+                        <!-- Botón -->
+                        <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                            <button class="btn text-white" style="background-color:#8e44ad;"
+                                    data-bs-toggle="modal" data-bs-target="#modal-@visita.Id">
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL -->
+            <div class="modal fade" id="modal-@visita.Id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        
+                        <div class="modal-header">
+                            <h5 class="modal-title">Consulta Psicológica</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            
+                            <p class="text-muted mb-3 small border-bottom pb-2">
+                                <i class="bi bi-calendar-event"></i> Atendido el: @visita.FechaVisita.ToString("f")
+                            </p>
+
+                            <!-- Información general -->
+                            <h6 class="fw-bold text-secondary">
+                                <i class="bi bi-person"></i> Información del Alumno
+                            </h6>
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="d-block text-muted">Edad</small>
+                                    <span>@visita.Edad años</span>
+                                </div>
+
+                                <div class="col-6">
+                                    <small class="d-block text-muted">Terapia previa</small>
+                                    <span class="@(visita.TerapiaPrevia ? "text-warning fw-bold" : "text-success")">
+                                        @(visita.TerapiaPrevia ? "Sí" : "No")
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Motivo consulta -->
+                            <h6 class="fw-bold text-primary">
+                                <i class="bi bi-chat-left-text"></i> Motivo de la Consulta
+                            </h6>
+                            <div class="p-3 bg-light border-start border-4 rounded" style="border-color:#8e44ad;">
+                                "@visita.MotivoConsulta"
+                            </div>
+
+                            <!-- Terapia previa -->
+                            @if (visita.TerapiaPrevia && !string.IsNullOrEmpty(visita.MotivoConsultaPrevia))
+                            {
+                                <h6 class="fw-bold text-warning mt-3">
+                                    <i class="bi bi-clock-history"></i> Terapia Anterior
+                                </h6>
+                                <div class="p-3 bg-light border-start border-warning border-4 rounded">
+                                    "@visita.MotivoConsultaPrevia"
+                                </div>
+                            }
+
+                            <!-- Medicación -->
+                            <h6 class="fw-bold text-danger mt-3">
+                                <i class="bi bi-capsule"></i> Medicación Psiquiátrica
+                            </h6>
+                            <div class="p-3 bg-light border-start border-danger border-4 rounded">
+                                @(string.IsNullOrEmpty(visita.MedicacionPsiquiatrica) ? "Ninguna" : visita.MedicacionPsiquiatrica)
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

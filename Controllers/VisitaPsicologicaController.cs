@@ -125,5 +125,25 @@ namespace ServicioMedico.Controllers
 
             return Json(new { nombreCompleto = alumno.NombreCompleto, carrera = alumno.Carrera, fechaNacimiento = alumno.FechaNacimiento });
         }
+
+        public async Task<IActionResult> History(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var historial = await _context.VisitasPsicologicas
+                .Where(v => v.Matricula == id)
+                .OrderByDescending(v => v.FechaVisita)
+                .ToListAsync();
+
+            ViewData["Matricula"] = id;
+
+            return View(historial);
+        }
+
+
     }
+
 }
