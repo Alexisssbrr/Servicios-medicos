@@ -131,7 +131,18 @@ namespace ServicioMedico.Controllers
                                 Id = Convert.ToInt32(reader["management_user_ID"]),
                                 Nombre = reader["management_user_Username"].ToString(),
                                 Email = reader["management_user_Email"].ToString(),
-                                Rol = reader["management_user_RoleID"]?.ToString() ?? "Sin Rol"
+                                Rol = Convert.ToString(reader["management_user_RoleID"]).Trim() switch
+                                {
+                                    "1" => "Administrador",
+                                    "2" => "Alumno",
+                                    "3" => "Docente",
+                                    "4" => "Jefe de Enfermería",
+                                    "5" => "Enfermero",
+                                    "6" => "Psicólogo",
+                                    "1002" => "Administrativo",
+                                    "" => "Sin Rol"
+
+                                }
                             });
                         }
                     }
@@ -144,7 +155,7 @@ namespace ServicioMedico.Controllers
         public async Task<IActionResult> ActualizarRol(int usuarioId, int nuevoRolId)
         {
             // Query directa para actualizar el RolId del usuario seleccionado
-            var query = "UPDATE management_user_table SET management_user_RoleID = @rolId WHERE Id = @userId";
+            var query = "UPDATE management_user_table SET management_user_RoleID = @rolId WHERE management_user_ID = @userId"; 
 
             using (var connection = _context.Database.GetDbConnection())
             {
