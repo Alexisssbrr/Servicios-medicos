@@ -1,0 +1,77 @@
+﻿@model ServicioMedico.Models.UsuariosViewModel
+
+<div class="container mt-4">
+    <h2>Gestión de Usuarios</h2>
+    <p>Administra los roles de los usuarios registrados.</p>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Correo Electrónico</th>
+                <th>Rol Actual</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* Cambiamos .Usuarios por .Users para que coincida con el controlador *@
+            @foreach (var usuario in Model.Users)
+            {
+                <tr>
+                    <td>@usuario.Nombre</td>
+                    <td>@usuario.Email</td>
+                    <td>
+                        <span class="badge @(usuario.Rol == "Admin" ? "bg-danger" : "bg-primary")">
+                            @usuario.Rol
+                        </span>
+                    </td>
+                    <td>
+                        @* Agregué type="button" para evitar que el formulario intente enviarse solo *@
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="abrirModalRol(@usuario.Id)">
+                            Cambiar Rol
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* --- MODAL PARA CAMBIAR ROL --- *@
+<div class="modal fade" id="modalRol" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="ActualizarRol" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Asignar Nuevo Rol</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="usuarioId" id="inputUsuarioId" />
+                    <div class="mb-3">
+                        <label class="form-label">Selecciona el Rol:</label>
+                        <select name="nuevoRolId" class="form-select">
+                            <option value="1">Admin</option>
+                            <option value="2">Usuario</option>
+                            @* Agrega aquí los IDs reales de tu tabla Roles *@
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function abrirModalRol(id) {
+            document.getElementById('inputUsuarioId').value = id;
+            var myModal = new bootstrap.Modal(document.getElementById('modalRol'));
+            myModal.show();
+        }
+    </script>
+}

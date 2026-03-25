@@ -23,7 +23,6 @@ namespace ServicioMedico.Controllers
             {
                 await connection.OpenAsync();
 
-                // Esta consulta busca la última visita de cada matrícula y jala el nombre y carrera de las otras tablas
                 var query = @"
             SELECT v.*, 
                    (dp.Nombre + ' ' + dp.ApellidoPaterno + ' ' + dp.ApellidoMaterno) AS NombreCompleto,
@@ -51,7 +50,6 @@ namespace ServicioMedico.Controllers
                                 NombreCompleto = reader["NombreCompleto"]?.ToString() ?? "No encontrado",
                                 Carrera = reader["Carrera"]?.ToString() ?? "No encontrada",
                                 FechaVisita = Convert.ToDateTime(reader["FechaVisita"])
-                                // Agrega aquí los demás campos que necesites mostrar (Edad, Diagnostico, etc.)
                             });
                         }
                     }
@@ -60,7 +58,6 @@ namespace ServicioMedico.Controllers
 
             return View(alumnos);
         }
-        
 
         public IActionResult Register()
         {
@@ -71,10 +68,7 @@ namespace ServicioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(VisitaMedica visita)
         {
-            // ASIGNACIÓN AUTOMÁTICA DE FECHA Y HORA
             visita.FechaVisita = DateTime.Now;
-
-            // Removemos la validación de FechaVisita porque la estamos asignando manualmente aquí
             ModelState.Remove("FechaVisita");
 
             if (ModelState.IsValid)
@@ -105,6 +99,74 @@ namespace ServicioMedico.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        // ==========================================================
+        // NUEVA SECCIÓN: GESTIÓN DE ROLES DE USUARIOS
+        // ==========================================================
+
+        public async Task<IActionResult> GestionUsuarios()
+        {
+            var modelo = new UsuariosViewModel();
+
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                await connection.OpenAsync();
+
+                // Traemos los usuarios y el nombre de su rol mediante un JOIN
+                var query = @"
+                    SELECT u.management_user_ID, u.management_user_Username, u.management_user_Email, r.management_user_RoleID 
+                    FROM management_user_table u
+                    LEFT JOIN management_user_table r ON u.management_user_RoleID = r.management_user_ID";
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            modelo.Users.Add(new UserDetalle
+                            {
+                                Id = Convert.ToInt32(reader["management_user_ID"]),
+                                Nombre = reader["management_user_Username"].ToString(),
+                                Email = reader["management_user_Email"].ToString(),
+                                Rol = reader["management_user_RoleID"]?.ToString() ?? "Sin Rol"
+                            });
+                        }
+                    }
+                }
+            }
+            return View(modelo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarRol(int usuarioId, int nuevoRolId)
+        {
+            // Query directa para actualizar el RolId del usuario seleccionado
+            var query = "UPDATE management_user_table SET management_user_RoleID = @rolId WHERE Id = @userId";
+
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                await connection.OpenAsync();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+
+                    var p1 = command.CreateParameter();
+                    p1.ParameterName = "@rolId";
+                    p1.Value = nuevoRolId;
+                    command.Parameters.Add(p1);
+
+                    var p2 = command.CreateParameter();
+                    p2.ParameterName = "@userId";
+                    p2.Value = usuarioId;
+                    command.Parameters.Add(p2);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+            return RedirectToAction(nameof(GestionUsuarios));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
