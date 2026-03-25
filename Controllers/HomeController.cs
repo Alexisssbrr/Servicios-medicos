@@ -115,9 +115,8 @@ namespace ServicioMedico.Controllers
 
                 // Traemos los usuarios y el nombre de su rol mediante un JOIN
                 var query = @"
-                    SELECT u.management_user_ID, u.management_user_Username, u.management_user_Email, r.management_user_RoleID 
-                    FROM management_user_table u
-                    LEFT JOIN management_user_table r ON u.management_user_RoleID = r.management_user_ID";
+                    SELECT management_user_ID, management_user_Username, management_user_Email, management_user_RoleID 
+                    FROM management_user_table";
 
                 using (var command = connection.CreateCommand())
                 {
@@ -140,7 +139,8 @@ namespace ServicioMedico.Controllers
                                     "5" => "Enfermero",
                                     "6" => "Psicólogo",
                                     "1002" => "Administrativo",
-                                    "" => "Sin Rol"
+                                    "" => "Sin Rol",
+                                    _ => "Rol Desconocido"
 
                                 }
                             });
